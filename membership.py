@@ -77,6 +77,7 @@ class Membership:
         # {"Membership": jarak}
         distance = {}
 
+        # menghitung jarak user ke setiap membership
         for data in self.table_req:
             type = data[0]
             membership = [data[1],data[2]]
@@ -86,12 +87,25 @@ class Membership:
             
             distance[type] = dist
         print(f"perhitungan jarak: {distance}")
+        # cari nilai minimal dari distance setiap membership
         min_membership = min(distance, key=distance.get)
+
         print(f"user {self.username} diprediksi membershipnya adalah {min_membership}")
+
+        # update membership user saat ini
         self.membership = min_membership
         self.data_user[self.username][2] = min_membership
 
         return min_membership
 
-
+    def calculate_total(self, list_harga: list):
+        # cek membership ada di table_benefit
+        single_benefit = [i for i in self.table_benefit if i[0] == self.membership]
+        if(single_benefit):
+            # perhituangan diskon
+            total = sum(list_harga) - (sum(list_harga)* single_benefit[0][2])
+            return total
+        else:
+            # tanpa diskon
+            return sum(list_harga)
 
