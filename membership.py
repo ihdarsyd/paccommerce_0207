@@ -58,3 +58,40 @@ class Membership:
         else:
             print("anda sudah terdaftar")
 
+
+    def calculate_dist(self, user: list, membership: list):
+        dist = ((user[0] - membership[0])**2 + (user[1] - membership[1])**2)**0.5
+        return dist
+    
+    def show_benefit(self):
+        print("Benefit Membership Paccommmece")
+        print("")
+        print(tabulate(self.table_benefit, self.header_benefit))
+    
+    def show_requirements(self):
+        print("Requirements Membership Paccommerce")
+        print("")
+        print(tabulate(self.table_req, self.header_req))
+
+    def predict_membership(self):
+        # {"Membership": jarak}
+        distance = {}
+
+        for data in self.table_req:
+            type = data[0]
+            membership = [data[1],data[2]]
+            user = [self.monthly_expense,self.monthly_income]
+
+            dist = self.calculate_dist(membership=membership, user=user)
+            
+            distance[type] = dist
+        print(f"perhitungan jarak: {distance}")
+        min_membership = min(distance, key=distance.get)
+        print(f"user {self.username} diprediksi membershipnya adalah {min_membership}")
+        self.membership = min_membership
+        self.data_user[self.username][2] = min_membership
+
+        return min_membership
+
+
+
